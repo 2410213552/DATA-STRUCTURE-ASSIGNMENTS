@@ -1,0 +1,66 @@
+//Algo1
+
+for (i = 1; i <= n; i++)
+    print("Hello World");
+
+//Time Complexity: O(n)
+//Runs n times (one print per iteration).
+
+
+//Algo2
+
+for (i = 1; i <= n; i++)
+    for (j = 1; j <= n; j++)
+        print("Hello World");
+
+//Time Complexity: O(n²)
+//Nested loops → n × n = n² iterations
+
+//Algo3
+
+for (i = 1; i < n; i = i * 2)
+    print("Hello World");
+
+//Time Complexity: O(log₂ n)
+// i doubles each time → runs about log₂(n) times
+
+
+//Algo4
+
+for (i = 1; i < n; i = i / 5)
+    print("Hello World");
+
+//Time Complexity: O(log₅ n)
+//Dividing by 5 each time → logarithmic base 5.
+
+
+//Algo5
+
+for (i = 1; i < n³; i = i * 5)
+    print("Hello World");
+
+//Time Complexity: O(log₅ n³) = O(3 log₅ n) = O(log n)
+
+
+//Algo6
+
+for (i = 1; i * i <= n; i++)
+    print("Hello World");
+
+//Time Complexity: O(√n)
+//Loop runs while i² ≤ n → i ≤ √n
+
+
+//Algo7
+
+int i = 1, k = 1;
+while (k <= n) {
+    i = i + 1;
+    k = k + i;
+    print("Hello World");
+}
+
+
+//Time Complexity: O(√n)
+//k grows roughly like the sum 1 + 2 + 3 + ... + z ≈ n,
+//so z ≈ √(2n) → O(√n) iterations.
