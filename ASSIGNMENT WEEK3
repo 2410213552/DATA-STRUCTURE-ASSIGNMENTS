@@ -1,140 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
+Conversion Of Infix expression to Postfix expression using Shunting Yard
 
-struct Node {
-    int data;
-    struct Node* next;
-};
 
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
-}
 
-// Traversal
-void traverse(struct Node* head) {
-    struct Node* temp = head;
-    printf("Linked List: ");
-    while (temp != NULL) {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
-    }
-    printf("NULL\n");
-}
+ Example: A + B * C
 
-// Insert at the beginning
-struct Node* insertFront(struct Node* head, int data) {
-    struct Node* newNode = createNode(data);
-    newNode->next = head;
-    head = newNode;
-    return head;
-}
+- Use a stack for operators
+- Output queue for the postfix expression
+- Apply precedence and associativity rules
 
-// Insert at the end
-struct Node* insertEnd(struct Node* head, int data) {
-    struct Node* newNode = createNode(data);
-    if (head == NULL)
-        return newNode;
+   // Steps
+1. A → Operand → Add to output → Output: A
+2. + → Stack empty → Push + → Stack: +
+3. B → Operand → Add to output → Output: A B
+4. * → Top of stack + → * has higher precedence → Push * → Stack: + *
+5. C → Operand → Add to output → Output: A B C
+6. End of input → Pop stack to output: Pop * → Output: A B C *, Pop + → Output: A B C * +
 
-    struct Node* temp = head;
-    while (temp->next != NULL)
-        temp = temp->next;
-    temp->next = newNode;
-    return head;
-}
 
-// Insert after a specific position (1-based index)
-struct Node* insertAfter(struct Node* head, int pos, int data) {
-    struct Node* newNode = createNode(data);
-    struct Node* temp = head;
-    for (int i = 1; i < pos && temp != NULL; i++)
-        temp = temp->next;
-
-    if (temp == NULL) {
-        printf("Position out of range!\n");
-        free(newNode);
-        return head;
-    }
-
-    newNode->next = temp->next;
-    temp->next = newNode;
-    return head;
-}
-
-// Delete from beginning
-struct Node* deleteFront(struct Node* head) {
-    if (head == NULL) return NULL;
-    struct Node* temp = head;
-    head = head->next;
-    free(temp);
-    return head;
-}
-
-// Delete from end
-struct Node* deleteEnd(struct Node* head) {
-    if (head == NULL) return NULL;
-    if (head->next == NULL) {
-        free(head);
-        return NULL;
-    }
-
-    struct Node* temp = head;
-    while (temp->next->next != NULL)
-        temp = temp->next;
-    free(temp->next);
-    temp->next = NULL;
-    return head;
-}
-
-// Delete by position (1-based index)
-struct Node* deletePos(struct Node* head, int pos) {
-    if (head == NULL) return NULL;
-
-    if (pos == 1) {
-        struct Node* temp = head;
-        head = head->next;
-        free(temp);
-        return head;
-    }
-
-    struct Node* temp = head;
-    for (int i = 1; i < pos - 1 && temp != NULL; i++)
-        temp = temp->next;
-
-    if (temp == NULL || temp->next == NULL) {
-        printf("Position out of range!\n");
-        return head;
-    }
-
-    struct Node* del = temp->next;
-    temp->next = del->next;
-    free(del);
-    return head;
-}
-
-// Main function
-int main() {
-    struct Node* head = NULL;
-
-    // Creating list
-    head = insertEnd(head, 10);
-    head = insertEnd(head, 20);
-    head = insertEnd(head, 30);
-    traverse(head);
-
-    // Insert operations
-    head = insertFront(head, 5);
-    head = insertAfter(head, 2, 15);
-    head = insertEnd(head, 40);
-    traverse(head);
-
-    // Delete operations
-    head = deleteFront(head);
-    head = deleteEnd(head);
-    head = deletePos(head, 2);
-    traverse(head);
-
-    return 0;
-}
+Postfix Result:  A B C * +
