@@ -1,124 +1,109 @@
+MAX Heap & MIN Heap
+
+Max Heap - The parent node is greater than or equal to its children. The largest element is at the root.
+
+Min Heap - The parent node is less than or equal to its children. The smallest element is at the root.
+
+
+
 #include <stdio.h>
-#include <stdlib.h>
 
-// Doubly linked list node structure
-struct Node {
-    int data;
-    struct Node* prev;
-    struct Node* next;
-};
+#define MAX 100
 
-// Function to create a new node
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode->data = data;
-    newNode->prev = NULL;
-    newNode->next = NULL;
-    return newNode;
+int heap[MAX];
+int size = 0;
+
+void swap(int *a,int *b){
+    int t = *a; *a = *b; *b = t;
 }
 
-// Function to display doubly linked list
-void display(struct Node* head) {
-    struct Node* temp = head;
-    printf("\nDoubly Linked List: ");
-    while (temp != NULL) {
-        printf("%d <-> ", temp->data);
-        temp = temp->next;
+
+void heapifyUp(int index){
+    if(index && heap[index] > heap[(index - 1)/2]){
+        swap(&heap[index], &heap[(index - 1)/2]);
+        heapifyUp((index - 1)/2);
     }
-    printf("NULL\n");
 }
 
-// Add element at the end of doubly linked list
-struct Node* insertEnd(struct Node* head, int data) {
-    struct Node* newNode = createNode(data);
-    if (head == NULL)
-        return newNode;
 
-    struct Node* temp = head;
-    while (temp->next != NULL)
-        temp = temp->next;
-
-    temp->next = newNode;
-    newNode->prev = temp;
-    return head;
+void insertMaxHeap(int val){
+    heap[size] = val;
+    heapifyUp(size);
+    size++;
 }
 
-// Add element between two nodes (after given position)
-struct Node* insertBetween(struct Node* head, int pos, int data) {
-    struct Node* newNode = createNode(data);
-    struct Node* temp = head;
+// Heapify Down for Max Heap
+void heapifyDown(int index){
+    int left = 2*index + 1;
+    int right = 2*index + 2;
+    int largest = index;
 
-    for (int i = 1; i < pos && temp != NULL; i++)
-        temp = temp->next;
+    if(left < size && heap[left] > heap[largest]) largest = left;
+    if(right < size && heap[right] > heap[largest]) largest = right;
 
-    if (temp == NULL) {
-        printf("Position out of range!\n");
-        free(newNode);
-        return head;
+    if(largest != index){
+        swap(&heap[index], &heap[largest]);
+        heapifyDown(largest);
     }
-
-    newNode->next = temp->next;
-    newNode->prev = temp;
-    if (temp->next != NULL)
-        temp->next->prev = newNode;
-    temp->next = newNode;
-
-    return head;
 }
 
-// Recursive function to delete all elements in the list
-void deleteAll(struct Node* head) {
-    if (head == NULL)
-        return;
-    deleteAll(head->next);
-    free(head);
+
+int extractMax(){
+    if(size == 0) return -1;
+    int root = heap[0];
+    heap[0] = heap[--size];
+    heapifyDown(0);
+    return root;
 }
 
-// Main function demonstrating all operations
-int main() {
-    struct Node* head = NULL;
 
-    // Adding elements at the end
-    head = insertEnd(head, 10);
-    head = insertEnd(head, 20);
-    head = insertEnd(head, 30);
-    display(head);
+// Code for Min Heap
 
-    // Adding an element between two existing nodes
-    head = insertBetween(head, 1, 15); // after 1st node
-    head = insertBetween(head, 3, 25); // after 3rd node
-    display(head);
+#include <stdio.h>
 
-    // Delete all elements recursively
-    deleteAll(head);
-    head = NULL;
-    printf("\nAll nodes deleted recursively.\n");
+#define MAX 100
 
-    return 0;
+int heap[MAX];
+int size = 0;
+
+void swap(int *a,int *b){
+    int t = *a; *a = *b; *b = t;
 }
 
-/* 
-------------------------------------------------------
-🧾 DIFFERENCE BETWEEN CIRCULAR AND NORMAL LINKED LIST
-------------------------------------------------------
-1. Normal Linked List:
-   - Last node points to NULL.
-   - Traversal ends when next == NULL.
 
-2. Circular Linked List:
-   - Last node points back to the first node.
-   - Traversal continues infinitely unless stopped.
-   - Used in round-robin scheduling or buffering.
+void heapifyUp(int index){
+    if(index && heap[index] < heap[(index - 1)/2]){
+        swap(&heap[index], &heap[(index - 1)/2]);
+        heapifyUp((index - 1)/2);
+    }
+}
 
-------------------------------------------------------
-📊 LINKED LIST VS. SORTING ALGORITHMS (ARRAYS)
-------------------------------------------------------
-| Aspect              | Linked List                     | Array/Sorting Algorithms           |
-|---------------------|----------------------------------|------------------------------------|
-| Memory Layout       | Dynamic (nodes, pointers)        | Contiguous (fixed size)            |
-| Access Time         | Sequential (O(n))                | Random access (O(1))               |
-| Insertion/Deletion  | Easy (O(1) if pointer known)     | Costly (O(n) due to shifting)      |
-| Sorting Used        | Merge/Insertion Sort (preferred) | Quick/Heap Sort (preferred)        |
-| Circular Advantage  | Continuous traversal             | Needs index reset after each pass  |
-------------------------------------------------------
-*/
+
+void insertMinHeap(int val){
+    heap[size] = val;
+    heapifyUp(size);
+    size++;
+}
+
+
+void heapifyDown(int index){
+    int left = 2*index + 1;
+    int right = 2*index + 2;
+    int smallest = index;
+
+    if(left < size && heap[left] < heap[smallest]) smallest = left;
+    if(right < size && heap[right] < heap[smallest]) smallest = right;
+
+    if(smallest != index){
+        swap(&heap[index], &heap[smallest]);
+        heapifyDown(smallest);
+    }
+}
+
+int extractMin(){
+    if(size == 0) return -1;
+    int root = heap[0];
+    heap[0] = heap[--size];
+    heapifyDown(0);
+    return root;
+}
