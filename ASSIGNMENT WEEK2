@@ -1,66 +1,48 @@
-//Algo1
+Towers Of Hanoi
 
-for (i = 1; i <= n; i++)
-    print("Hello World");
+ The Tower of Hanoi is a classic mathematical puzzle used in computer science, mathematics,
+and problem-solving contexts.
 
-//Time Complexity: O(n)
-//Runs n times (one print per iteration).
-
-
-//Algo2
-
-for (i = 1; i <= n; i++)
-    for (j = 1; j <= n; j++)
-        print("Hello World");
-
-//Time Complexity: O(n²)
-//Nested loops → n × n = n² iterations
-
-//Algo3
-
-for (i = 1; i < n; i = i * 2)
-    print("Hello World");
-
-//Time Complexity: O(log₂ n)
-// i doubles each time → runs about log₂(n) times
+Tower of Hanoi is a puzzle where disks are moved between pegs under specific rules,
+often used to teach recursion and algorithmic thinking.
 
 
-//Algo4
-
-for (i = 1; i < n; i = i / 5)
-    print("Hello World");
-
-//Time Complexity: O(log₅ n)
-//Dividing by 5 each time → logarithmic base 5.
+#include <stdio.h>
 
 
-//Algo5
+void towerOfHanoi(int n, char source, char destination, char auxiliary) {
+    if (n == 1) {
+        printf("Move disk 1 from %c to %c\n", source, destination);
+        return;
+    }
+    
+    towerOfHanoi(n-1, source, auxiliary, destination);
+    
+    
+    printf("Move disk %d from %c to %c\n", n, source, destination);
+    
 
-for (i = 1; i < n³; i = i * 5)
-    print("Hello World");
-
-//Time Complexity: O(log₅ n³) = O(3 log₅ n) = O(log n)
-
-
-//Algo6
-
-for (i = 1; i * i <= n; i++)
-    print("Hello World");
-
-//Time Complexity: O(√n)
-//Loop runs while i² ≤ n → i ≤ √n
-
-
-//Algo7
-
-int i = 1, k = 1;
-while (k <= n) {
-    i = i + 1;
-    k = k + i;
-    print("Hello World");
+    towerOfHanoi(n-1, auxiliary, destination, source);
 }
 
+int main() {
+    int n = 3; 
+    printf("Tower of Hanoi with %d disks:\n", n);
+    towerOfHanoi(n, 'A', 'C', 'B'); // 
+    return 0;
+}
 
-//Time Complexity: O(√n)
-//k grows roughly like the sum 1 + 2 + 3 + ... + z ≈ n,
-//so z ≈ √(2n) → O(√n) iterations.
+       Call Tree
+Hanoi(3, A, C, B)
+│
+├── Hanoi(2, A, B, C)
+│   ├── Hanoi(1, A, C, B)  --> Move 1 from A to C
+│   └── Move disk 2 from A to B
+│   └── Hanoi(1, C, B, A)  --> Move 1 from C to B
+│
+├── Move disk 3 from A to C
+│
+└── Hanoi(2, B, C, A)
+    ├── Hanoi(1, B, A, C)  --> Move 1 from B to A
+    └── Move disk 2 from B to C
+    └── Hanoi(1, A, C, B)  --> Move 1 from A to C
